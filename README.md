@@ -1,1 +1,5 @@
 # Business-Intelligence-System-for-ERP-Application
+
+The solution was required to add Business Intelligence interface to the product that can provide one shot summary with high level of accuracy in single dashboard along with various interactive reporters. The requirement was to create a Dashboard & Report Management system to display the summary of statistical data in the form of various charts.
+
+Highly interactive and responsive charts were developed to integrate in the form of dashboards. Charts like bar, pie, 3D column, area, line, scatter are developed. Each section of the charts has the drill down reports to show the detailed data. The input data to the reports are configurable and can be updated by the end user to view the desired data. The browser-based interactive viewer lets users change filtering, sorting, and column formatting changes to the report repository. Data abstraction layer for simplifying data field descriptions so non-technical users can easily understand and build their own reports.
