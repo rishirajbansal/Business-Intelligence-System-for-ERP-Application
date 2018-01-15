@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="sub_KeyMetrics_backorderdAmount" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="4d187818-3d08-48b1-86c1-4fce89e039da">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<queryString>
+		<![CDATA[SELECT * FROM stoshipd WHERE stage = 'BKO']]>
+	</queryString>
+	<field name="doc_no" class="java.lang.Integer"/>
+	<field name="line_no" class="java.lang.Short"/>
+	<field name="ship_no" class="java.lang.Short"/>
+	<field name="kit_group" class="java.lang.Short"/>
+	<field name="stage" class="java.lang.String"/>
+	<field name="ship_qty" class="java.math.BigDecimal"/>
+	<field name="sell_unit" class="java.lang.String"/>
+	<field name="ship_weight" class="java.math.BigDecimal"/>
+	<field name="commit_qty" class="java.math.BigDecimal"/>
+	<field name="pic_ticket_no" class="java.lang.Short"/>
+	<field name="mfs_printed" class="java.lang.String"/>
+	<field name="inv_doc_no" class="java.lang.Integer"/>
+	<field name="sell_to_code" class="java.lang.String"/>
+	<field name="ship_to_code" class="java.lang.String"/>
+	<field name="bill_to_code" class="java.lang.String"/>
+	<field name="item_code" class="java.lang.String"/>
+	<field name="warehouse_code" class="java.lang.String"/>
+	<field name="stock_location" class="java.lang.String"/>
+	<field name="price_group" class="java.lang.String"/>
+	<field name="price" class="java.math.BigDecimal"/>
+	<field name="orig_price" class="java.math.BigDecimal"/>
+	<field name="retail_price" class="java.math.BigDecimal"/>
+	<field name="price_approval" class="java.lang.String"/>
+	<field name="tax_rate" class="java.math.BigDecimal"/>
+	<field name="tax_amount" class="java.math.BigDecimal"/>
+	<field name="net_amount" class="java.math.BigDecimal"/>
+	<field name="item_cost" class="java.math.BigDecimal"/>
+	<field name="gross_margin" class="java.math.BigDecimal"/>
+	<field name="new_date" class="java.sql.Date"/>
+	<field name="bko_date" class="java.sql.Date"/>
+	<field name="ord_date" class="java.sql.Date"/>
+	<field name="pic_date" class="java.sql.Date"/>
+	<field name="shp_date" class="java.sql.Date"/>
+	<field name="inv_date" class="java.sql.Date"/>
+	<field name="pst_date" class="java.sql.Date"/>
+	<field name="can_date" class="java.sql.Date"/>
+	<field name="proj_ship_date" class="java.sql.Date"/>
+	<field name="request_date" class="java.sql.Date"/>
+	<field name="reject_date" class="java.sql.Date"/>
+	<field name="actual_ship_date" class="java.sql.Date"/>
+	<field name="fact_sched_date" class="java.sql.Date"/>
+	<field name="ship_via_cd" class="java.lang.String"/>
+	<field name="mtaxg_code" class="java.lang.String"/>
+	<field name="po_doc_no" class="java.lang.Integer"/>
+	<field name="ship_lookup" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="40" splitType="Stretch">
+			<staticText>
+				<reportElement x="116" y="8" width="322" height="24" forecolor="#3366FF" uuid="f5327ed6-8527-4e97-955c-1cd6c5dc9fff"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="18" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Details of Total Dollars Backordered]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="30" splitType="Stretch">
+			<frame>
+				<reportElement x="0" y="0" width="555" height="30" uuid="5eaa0713-d4e2-45a0-a347-01aa19ce6f34"/>
+				<staticText>
+					<reportElement x="0" y="5" width="64" height="20" uuid="4f06f03b-68da-4313-97cb-dc2028e7c339"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Calibri" size="12" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Doc No.]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="89" y="5" width="64" height="20" uuid="d5bea90e-b004-4ec2-9799-448525d31d48"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Calibri" size="12" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Line No.]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="178" y="5" width="64" height="20" uuid="45c6f67c-d187-4836-9527-7e39215562b8"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Calibri" size="12" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Bill To Code]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="267" y="5" width="64" height="20" uuid="306b2680-042e-42dd-a480-b4a81ee665b1"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Calibri" size="12" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Item Code]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="386" y="5" width="64" height="20" uuid="4ac428f0-02fc-42d6-a2d7-06a4ae2ee615"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Calibri" size="12" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Ship Quantity]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="493" y="5" width="57" height="20" uuid="2b094792-fbc1-41c4-a753-8b1deb1754a3"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Calibri" size="12" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Amount]]></text>
+				</staticText>
+				<line>
+					<reportElement x="0" y="27" width="550" height="1" uuid="a8dfd2b6-46da-4fef-b990-7731d54f2d11"/>
+				</line>
+			</frame>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="30" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="5" width="64" height="20" uuid="850a3f99-356c-4600-956f-a8a36e0f8119"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Calibri" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{doc_no}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="89" y="5" width="64" height="20" uuid="48b54def-f6d3-4985-8f0c-149f18056584"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Calibri" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{line_no}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="178" y="5" width="64" height="20" uuid="94f573e2-896d-480e-9093-a83e839e0156"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Calibri" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{bill_to_code}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="267" y="5" width="87" height="20" uuid="790b114c-c25c-492d-a24d-609e62b37fc5"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Calibri" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{item_code}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="386" y="5" width="64" height="20" uuid="07b86581-769d-444c-a9f4-f4ac5a486a10"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Calibri" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ship_qty}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="461" y="5" width="89" height="20" uuid="85f49bea-63df-4040-83a1-5c47f4f4e857"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Calibri" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{net_amount}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

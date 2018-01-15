@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="drilldown_level2_ActualVsProjectedSales" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="9c158df8-f27d-4415-9235-45325c302918">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="ITEM_CLASS" class="java.lang.String">
+		<defaultValueExpression><![CDATA["AUDIO"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="YEAR" class="java.lang.String">
+		<defaultValueExpression><![CDATA["2013"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="PERIOD" class="java.lang.String">
+		<defaultValueExpression><![CDATA["07"]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT (NVL(MTD_Sales,0) - NVL(MTD_credit_memos,0)) AS NET_MTD_Sales, (NVL(margin,0) - NVL(credit_memos_margin,0)) AS NET_margin,
+(( (NVL(margin,0) - NVL(credit_memos_margin,0)) * 100 ) / (NVL(MTD_Sales,0) - NVL(MTD_credit_memos,0)) ) AS perct_margin, set1.item_code, set1.description
+FROM
+(SELECT SUM(stoshipd.net_amount) AS MTD_Sales, SUM(stoshipd.gross_margin) AS margin, stiinvtr.item_code AS item_code, stiinvtr.desc1 AS description
+FROM stoordre, stoshipd, stoinvce, stiinvtr, stxperdr
+WHERE stoshipd.inv_doc_no = stoinvce.inv_doc_no
+AND stoordre.doc_no = stoshipd.doc_no
+AND stoshipd.item_code = stiinvtr.item_code
+AND stoshipd.stage = 'PST'
+AND stoordre.like_type != 'CRM'
+AND stoinvce.inv_date >= stxperdr.start_date
+AND stoinvce.inv_date <= stxperdr.end_date
+AND stxperdr.period_year = $P{YEAR}
+AND stxperdr.period = $P{PERIOD}
+AND stiinvtr.item_class = $P{ITEM_CLASS}
+GROUP BY stiinvtr.item_code, stiinvtr.desc1) AS set1,
+outer
+(SELECT SUM(stoshipd.net_amount) AS MTD_credit_memos, SUM(stoshipd.gross_margin) AS credit_memos_margin, stiinvtr.item_code AS item_code, stiinvtr.desc1 AS description
+FROM stoordre, stoshipd, stoinvce, stiinvtr, stxperdr
+WHERE stoshipd.inv_doc_no = stoinvce.inv_doc_no
+AND stoordre.doc_no = stoshipd.doc_no
+AND stoshipd.item_code = stiinvtr.item_code
+AND stoshipd.stage = 'PST'
+AND stoordre.like_type = 'CRM'
+AND stoinvce.inv_date >= stxperdr.start_date
+AND stoinvce.inv_date <= stxperdr.end_date
+AND stxperdr.period_year = $P{YEAR}
+AND stxperdr.period = $P{PERIOD}
+AND stiinvtr.item_class = $P{ITEM_CLASS}
+GROUP BY stiinvtr.item_code,  stiinvtr.desc1) AS set2
+WHERE set1.item_code = set2.item_code]]>
+	</queryString>
+	<field name="net_mtd_sales" class="java.math.BigDecimal"/>
+	<field name="net_margin" class="java.math.BigDecimal"/>
+	<field name="perct_margin" class="java.math.BigDecimal"/>
+	<field name="item_code" class="java.lang.String"/>
+	<field name="description" class="java.lang.String"/>
+	<variable name="MTD_sales" class="java.lang.String">
+		<variableExpression><![CDATA[$F{net_mtd_sales}.setScale( 2, RoundingMode.HALF_UP )]]></variableExpression>
+		<initialValueExpression><![CDATA[$F{net_mtd_sales}.setScale( 2, RoundingMode.HALF_UP )]]></initialValueExpression>
+	</variable>
+	<variable name="margin" class="java.lang.String">
+		<variableExpression><![CDATA[$F{net_margin}.setScale( 2, RoundingMode.HALF_UP )]]></variableExpression>
+		<initialValueExpression><![CDATA[$F{net_margin}.setScale( 2, RoundingMode.HALF_UP )]]></initialValueExpression>
+	</variable>
+	<variable name="percent_margin" class="java.lang.String">
+		<variableExpression><![CDATA[$F{perct_margin}.setScale( 2, RoundingMode.HALF_UP )]]></variableExpression>
+		<initialValueExpression><![CDATA[$F{perct_margin}.setScale( 2, RoundingMode.HALF_UP )]]></initialValueExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="40" splitType="Stretch">
+			<frame>
+				<reportElement x="13" y="0" width="529" height="40" uuid="7b9491f6-1559-41ce-90ea-c0d2ed836cba"/>
+				<staticText>
+					<reportElement x="74" y="0" width="329" height="40" forecolor="#3366FF" uuid="6c6fd1cb-c513-4875-91f2-7b8a2d78cd88"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Calibri" size="24" isBold="false"/>
+					</textElement>
+					<text><![CDATA[Details of the item codes of class]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="403" y="0" width="126" height="40" forecolor="#3366FF" uuid="1287f081-c95b-4aad-9d55-dd599781b92a"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Calibri" size="24" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{ITEM_CLASS}]]></textFieldExpression>
+				</textField>
+			</frame>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="30" splitType="Stretch">
+			<frame>
+				<reportElement mode="Opaque" x="0" y="0" width="555" height="30" uuid="3d069ddd-dc50-4ed6-b182-2d3fab27c712"/>
+				<staticText>
+					<reportElement mode="Opaque" x="0" y="5" width="93" height="20" forecolor="#FFFFFF" backcolor="#999999" uuid="804a178c-9f1d-457f-a86f-2f66a444b03f"/>
+					<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2">
+						<pen lineColor="#000000"/>
+						<topPen lineWidth="0.25" lineColor="#000000"/>
+						<leftPen lineWidth="0.25" lineColor="#000000"/>
+						<bottomPen lineWidth="0.25" lineColor="#000000"/>
+						<rightPen lineWidth="0.25" lineColor="#000000"/>
+					</box>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Calibri" size="12" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Item Code]]></text>
+				</staticText>
+				<staticText>
+					<reportElement mode="Opaque" x="256" y="5" width="108" height="20" forecolor="#FFFFFF" backcolor="#999999" uuid="e7159b61-25ef-4618-a4ce-262cc3b6c634"/>
+					<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2">
+						<pen lineColor="#000000"/>
+						<topPen lineWidth="0.25" lineColor="#000000"/>
+						<leftPen lineWidth="0.25" lineColor="#000000"/>
+						<bottomPen lineWidth="0.25" lineColor="#000000"/>
+						<rightPen lineWidth="0.25" lineColor="#000000"/>
+					</box>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Calibri" size="12" isBold="true"/>
+					</textElement>
+					<text><![CDATA[MTD Sales]]></text>
+				</staticText>
+				<staticText>
+					<reportElement mode="Opaque" x="364" y="5" width="101" height="20" forecolor="#FFFFFF" backcolor="#999999" uuid="b56d8d86-c462-4b5a-a7ad-418f0eb925c4"/>
+					<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2">
+						<pen lineColor="#000000"/>
+						<topPen lineWidth="0.25" lineColor="#000000"/>
+						<leftPen lineWidth="0.25" lineColor="#000000"/>
+						<bottomPen lineWidth="0.25" lineColor="#000000"/>
+						<rightPen lineWidth="0.25" lineColor="#000000"/>
+					</box>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Calibri" size="12" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Sales Margin]]></text>
+				</staticText>
+				<staticText>
+					<reportElement mode="Opaque" x="465" y="5" width="90" height="20" forecolor="#FFFFFF" backcolor="#999999" uuid="39e9fca6-b2ad-4e16-ab68-37b193083a68"/>
+					<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2">
+						<pen lineColor="#000000"/>
+						<topPen lineWidth="0.25" lineColor="#000000"/>
+						<leftPen lineWidth="0.25" lineColor="#000000"/>
+						<bottomPen lineWidth="0.25" lineColor="#000000"/>
+						<rightPen lineWidth="0.25" lineColor="#000000"/>
+					</box>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Calibri" size="12" isBold="true"/>
+					</textElement>
+					<text><![CDATA[% Margin]]></text>
+				</staticText>
+				<staticText>
+					<reportElement mode="Opaque" x="93" y="5" width="163" height="20" forecolor="#FFFFFF" backcolor="#999999" uuid="282555ce-8ef4-481b-998a-43d8afd2679b"/>
+					<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2">
+						<pen lineColor="#000000"/>
+						<topPen lineWidth="0.25" lineColor="#000000"/>
+						<leftPen lineWidth="0.25" lineColor="#000000"/>
+						<bottomPen lineWidth="0.25" lineColor="#000000"/>
+						<rightPen lineWidth="0.25" lineColor="#000000"/>
+					</box>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Calibri" size="12" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Description]]></text>
+				</staticText>
+				<line>
+					<reportElement x="0" y="27" width="555" height="1" uuid="88128cb9-6b9e-487b-969a-bb343d4409fb"/>
+				</line>
+			</frame>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="30" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="5" width="93" height="20" uuid="40abd86b-1a54-4056-a89e-e5db5b8c6ddd"/>
+				<box topPadding="0" leftPadding="2" bottomPadding="0" rightPadding="2">
+					<pen lineWidth="0.5" lineStyle="Solid" lineColor="#666666"/>
+					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#666666"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Calibri"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{item_code}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="93" y="5" width="163" height="20" uuid="f64fa479-e199-4114-9fe8-ba820b27e673"/>
+				<box topPadding="0" leftPadding="2" bottomPadding="0" rightPadding="2">
+					<pen lineWidth="0.5" lineStyle="Solid" lineColor="#666666"/>
+					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#666666"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Calibri"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{description}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="256" y="5" width="108" height="20" uuid="95bfe916-ca61-4610-a850-34fab7c60b8f"/>
+				<box topPadding="0" leftPadding="2" bottomPadding="0" rightPadding="2">
+					<pen lineWidth="0.5" lineStyle="Solid" lineColor="#666666"/>
+					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Calibri"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{MTD_sales}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="364" y="5" width="101" height="20" uuid="1af92cc8-5d7c-44f1-a25f-50189ba382a1"/>
+				<box topPadding="0" leftPadding="2" bottomPadding="0" rightPadding="2">
+					<pen lineWidth="0.5" lineStyle="Solid" lineColor="#666666"/>
+					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Calibri"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{margin}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="465" y="5" width="90" height="20" uuid="0f673b1a-f17e-49e9-859c-e9fa5b74c85b"/>
+				<box topPadding="0" leftPadding="2" bottomPadding="0" rightPadding="2">
+					<pen lineWidth="0.5" lineStyle="Solid" lineColor="#666666"/>
+					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#666666"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#666666"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#666666"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Calibri"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{percent_margin}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="drilldown_TotalOrdersShipments" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="69e09b88-8a82-43b0-940d-f9e2ee0dc0b5">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="YEAR" class="java.lang.String">
+		<defaultValueExpression><![CDATA["2008"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="MONTH" class="java.lang.String">
+		<defaultValueExpression><![CDATA["10"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="WAREHOUSE_CODE" class="java.lang.String">
+		<defaultValueExpression><![CDATA["SEATTLE"]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT stoinvce.inv_no, stoinvce.inv_date, stoshipd.bill_to_code, stoinvce.total_amount, (SELECT DISTINCT bus_name FROM stoordre WHERE bill_to_code = stoshipd.bill_to_code) AS customer FROM stoinvce, stoshipd WHERE stoinvce.inv_doc_no = stoshipd.inv_doc_no AND stoinvce.stage = 'PST' AND TO_CHAR(stoinvce.inv_date, '%Y') = $P{YEAR} AND MONTH(stoinvce.inv_date) = $P{MONTH} AND stoshipd.warehouse_code = $P{WAREHOUSE_CODE}
+]]>
+	</queryString>
+	<field name="inv_no" class="java.lang.String"/>
+	<field name="inv_date" class="java.sql.Date"/>
+	<field name="bill_to_code" class="java.lang.String"/>
+	<field name="total_amount" class="java.math.BigDecimal"/>
+	<field name="customer" class="java.lang.String"/>
+	<variable name="SELECTED_MONTH" class="java.lang.String">
+		<variableExpression><![CDATA[(new java.text.SimpleDateFormat("MMMM")).format($F{inv_date})]]></variableExpression>
+		<initialValueExpression><![CDATA[(new java.text.SimpleDateFormat("MMMM")).format($F{inv_date})]]></initialValueExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="40" splitType="Stretch">
+			<frame>
+				<reportElement x="13" y="0" width="529" height="35" uuid="aaf4070c-263f-431a-ba85-04e6eedb65d5"/>
+				<staticText>
+					<reportElement x="0" y="0" width="391" height="35" forecolor="#3366FF" uuid="5ea3ca8e-d166-42ad-84d0-a783ad77364f"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Calibri" size="22" isBold="false"/>
+					</textElement>
+					<text><![CDATA[List of sales order invoices in the month of ]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="391" y="0" width="138" height="35" forecolor="#3366FF" uuid="11e7a92e-adca-4e3f-a9ca-a2eaa91ad098"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Calibri" size="22" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{SELECTED_MONTH}]]></textFieldExpression>
+				</textField>
+			</frame>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="30" splitType="Stretch">
+			<frame>
+				<reportElement x="0" y="0" width="555" height="30" uuid="8c138e61-4749-4b93-93c2-b913e8369a67"/>
+				<staticText>
+					<reportElement x="0" y="5" width="91" height="20" uuid="d72dbbee-cbcd-4513-8e0a-20492ef70e98"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Calibri" size="12" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Invoice No.]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="205" y="5" width="233" height="20" uuid="5725b9ef-402a-42ca-be5f-eea0d3c9452f"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Calibri" size="12" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Customer]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="103" y="5" width="90" height="20" uuid="42354aac-c57a-492c-aeff-261b164be0f4"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Calibri" size="12" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Invoice Date]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="457" y="5" width="81" height="20" uuid="e9ec265f-9805-403f-9865-7f4736b6ba11"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Calibri" size="12" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Invoice Total]]></text>
+				</staticText>
+				<line>
+					<reportElement x="0" y="27" width="555" height="1" uuid="a37cff9d-b8a6-40a0-b097-471ad7e01249"/>
+				</line>
+			</frame>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="30" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="5" width="91" height="20" uuid="43226ee6-cb41-42ba-a237-476121a208ab"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Calibri"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{inv_no}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="103" y="5" width="90" height="20" uuid="6185d47e-d71c-4e12-87fb-34a5218c249c"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Calibri"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{inv_date}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="205" y="6" width="233" height="20" uuid="a3d524d6-8a5c-4dab-94c1-1b83d76b9dff"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Calibri"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{customer}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="457" y="5" width="81" height="20" uuid="7ac71150-39c3-4288-984e-ab9937dbe209"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Calibri"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{total_amount}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

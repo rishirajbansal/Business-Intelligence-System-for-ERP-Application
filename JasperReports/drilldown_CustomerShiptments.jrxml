@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="drilldown_CustomerShiptments" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="9a677dac-c11e-417b-8af7-57fb1543ad03">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="YEAR" class="java.lang.String">
+		<defaultValueExpression><![CDATA["2008"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="MONTH" class="java.lang.String">
+		<defaultValueExpression><![CDATA["10"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="WAREHOUSE_CODE" class="java.lang.String">
+		<defaultValueExpression><![CDATA["SEATTLE"]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT order_no, order_date, to_ship_date, ship_date, bus_name, (ship_date - to_ship_date) AS dayslate FROM stoordre WHERE like_type = 'REG' AND TO_CHAR(order_date, '%Y') = $P{YEAR} AND MONTH(order_date) = $P{MONTH} AND ship_date IS NOT NULL AND warehouse_code = $P{WAREHOUSE_CODE} AND (ship_date - to_ship_date) >0]]>
+	</queryString>
+	<field name="order_no" class="java.lang.String"/>
+	<field name="order_date" class="java.sql.Date"/>
+	<field name="to_ship_date" class="java.sql.Date"/>
+	<field name="ship_date" class="java.sql.Date"/>
+	<field name="bus_name" class="java.lang.String"/>
+	<field name="dayslate" class="java.lang.Integer"/>
+	<variable name="SELECTED_MONTH" class="java.lang.String">
+		<variableExpression><![CDATA[(new java.text.SimpleDateFormat("MMMM")).format($F{order_date})]]></variableExpression>
+		<initialValueExpression><![CDATA[(new java.text.SimpleDateFormat("MMMM")).format($F{order_date})]]></initialValueExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="40" splitType="Stretch">
+			<frame>
+				<reportElement x="32" y="0" width="490" height="35" uuid="ad0db882-e17e-4549-b098-9c8b53d406f6"/>
+				<staticText>
+					<reportElement x="10" y="0" width="346" height="35" forecolor="#3366FF" uuid="62346064-fb23-447e-9898-726a6f30b47a"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Calibri" size="24" isBold="false"/>
+					</textElement>
+					<text><![CDATA[List of sales orders in the month of ]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="356" y="0" width="134" height="35" forecolor="#3366FF" uuid="c76d2f87-0ded-4574-a0b1-43a95b4e1084"/>
+					<textElement verticalAlignment="Middle">
+						<font size="24" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{SELECTED_MONTH}]]></textFieldExpression>
+				</textField>
+			</frame>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="30" splitType="Stretch">
+			<frame>
+				<reportElement x="0" y="0" width="555" height="30" uuid="e7ad2c63-0cc4-4cb9-9e90-12ef8f8667fa"/>
+				<staticText>
+					<reportElement x="0" y="5" width="50" height="20" uuid="0ea538ce-9852-4e4f-b040-145618161e23"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Calibri" size="12" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Order No.]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="54" y="5" width="180" height="20" uuid="52a7ead2-5203-443f-8e0e-5592e43aee8f"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Calibri" size="12" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Customer]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="235" y="5" width="90" height="20" uuid="7198f221-0f01-4f1c-ad7d-bd5d48f38d6a"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Calibri" size="12" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Order Date]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="326" y="5" width="90" height="20" uuid="402f953a-7133-4970-b380-d08894d5f379"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Calibri" size="12" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Required Date]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="418" y="5" width="87" height="20" uuid="c259d5f3-c753-4c41-8d31-1d9ece3d7776"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Calibri" size="12" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Ship Date]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="504" y="5" width="50" height="20" uuid="4314ba51-4a01-4e2b-9081-fc789cf95a0f"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Calibri" size="12" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Days Late]]></text>
+				</staticText>
+				<line>
+					<reportElement x="0" y="27" width="550" height="1" uuid="c99cef56-e384-4faa-92f0-150c9adb42a5"/>
+				</line>
+			</frame>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="30" splitType="Stretch">
+			<textField>
+				<reportElement x="1" y="5" width="45" height="20" uuid="d05b300b-d882-4cc4-8e9d-48838ac681ff"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Calibri" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{order_no}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="54" y="5" width="180" height="20" uuid="e101d8f7-ebc8-45a9-a124-f082df5005df"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Calibri" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{bus_name}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="235" y="5" width="90" height="20" uuid="8ea50469-14fd-4626-860d-ab08065a51d8"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Calibri" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{order_date}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="326" y="5" width="90" height="20" uuid="228e0d9c-c2c4-4303-826a-f007b06b4c84"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Calibri" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{to_ship_date}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="418" y="5" width="87" height="20" uuid="bbea0452-0319-49ab-852c-db8abaabccb8"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Calibri" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ship_date}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="505" y="5" width="50" height="20" uuid="a260f45a-9e22-488d-acbb-6fe48fd75ca4"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dayslate}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

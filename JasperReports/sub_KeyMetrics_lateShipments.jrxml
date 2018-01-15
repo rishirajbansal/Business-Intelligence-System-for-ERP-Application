@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="sub_KeyMetrics_lateShipments" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="a44a07f7-b59d-4a07-b5f1-7923ada02a86">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<queryString>
+		<![CDATA[SELECT * FROM stoordre WHERE order_status = 'ACT' AND like_type = 'REG' AND required_date > order_date]]>
+	</queryString>
+	<field name="doc_no" class="java.lang.Integer"/>
+	<field name="orig_doc_no" class="java.lang.Integer"/>
+	<field name="order_no" class="java.lang.String"/>
+	<field name="inv_doc_no" class="java.lang.Integer"/>
+	<field name="inv_no" class="java.lang.String"/>
+	<field name="po_no" class="java.lang.String"/>
+	<field name="pic_ticket_no" class="java.lang.Short"/>
+	<field name="next_kit_group" class="java.lang.Short"/>
+	<field name="ack_printed" class="java.lang.String"/>
+	<field name="order_type" class="java.lang.String"/>
+	<field name="like_type" class="java.lang.String"/>
+	<field name="order_status" class="java.lang.String"/>
+	<field name="hi_stage" class="java.lang.String"/>
+	<field name="lo_stage" class="java.lang.String"/>
+	<field name="bo_allowed" class="java.lang.String"/>
+	<field name="recur_unit" class="java.lang.String"/>
+	<field name="recur_every" class="java.lang.Short"/>
+	<field name="recur_times" class="java.lang.Short"/>
+	<field name="recur_through" class="java.sql.Date"/>
+	<field name="prev_recur" class="java.sql.Date"/>
+	<field name="next_recur" class="java.sql.Date"/>
+	<field name="num_releases" class="java.lang.Short"/>
+	<field name="release_type" class="java.lang.String"/>
+	<field name="order_date" class="java.sql.Date"/>
+	<field name="to_ship_date" class="java.sql.Date"/>
+	<field name="alloc_date" class="java.sql.Date"/>
+	<field name="ship_date" class="java.sql.Date"/>
+	<field name="complete_date" class="java.sql.Date"/>
+	<field name="warehouse_code" class="java.lang.String"/>
+	<field name="department" class="java.lang.String"/>
+	<field name="sls_psn_code" class="java.lang.String"/>
+	<field name="cust_code" class="java.lang.String"/>
+	<field name="ship_to_code" class="java.lang.String"/>
+	<field name="bill_to_code" class="java.lang.String"/>
+	<field name="bus_name" class="java.lang.String"/>
+	<field name="contact" class="java.lang.String"/>
+	<field name="address1" class="java.lang.String"/>
+	<field name="address2" class="java.lang.String"/>
+	<field name="city" class="java.lang.String"/>
+	<field name="state" class="java.lang.String"/>
+	<field name="zip" class="java.lang.String"/>
+	<field name="country" class="java.lang.String"/>
+	<field name="terms_code" class="java.lang.String"/>
+	<field name="terms_approval" class="java.lang.String"/>
+	<field name="pay_method" class="java.lang.String"/>
+	<field name="payment" class="java.lang.String"/>
+	<field name="card_no" class="java.lang.String"/>
+	<field name="exp_date" class="java.lang.String"/>
+	<field name="card_holder" class="java.lang.String"/>
+	<field name="check_no" class="java.lang.String"/>
+	<field name="trd_ds_code" class="java.lang.String"/>
+	<field name="trd_ds_type" class="java.lang.String"/>
+	<field name="trd_ds_rate" class="java.math.BigDecimal"/>
+	<field name="multi_shipto" class="java.lang.String"/>
+	<field name="tax_rate" class="java.math.BigDecimal"/>
+	<field name="staging_area" class="java.lang.String"/>
+	<field name="fob_point" class="java.lang.String"/>
+	<field name="ship_via" class="java.lang.String"/>
+	<field name="ship_weight" class="java.math.BigDecimal"/>
+	<field name="item_amount" class="java.math.BigDecimal"/>
+	<field name="discountable" class="java.math.BigDecimal"/>
+	<field name="trd_ds_amount" class="java.math.BigDecimal"/>
+	<field name="taxable" class="java.math.BigDecimal"/>
+	<field name="tax_amount" class="java.math.BigDecimal"/>
+	<field name="frght_amount" class="java.math.BigDecimal"/>
+	<field name="total_amount" class="java.math.BigDecimal"/>
+	<field name="create_date" class="java.sql.Date"/>
+	<field name="create_time" class="java.lang.String"/>
+	<field name="create_id" class="java.lang.String"/>
+	<field name="l_mod_date" class="java.sql.Date"/>
+	<field name="l_mod_time" class="java.lang.String"/>
+	<field name="l_mod_id" class="java.lang.String"/>
+	<field name="system_order" class="java.lang.String"/>
+	<field name="spr_no" class="java.lang.String"/>
+	<field name="cust_ord_date" class="java.sql.Date"/>
+	<field name="cust_po_date" class="java.sql.Date"/>
+	<field name="fact_ack_date" class="java.sql.Date"/>
+	<field name="fact_rec_date" class="java.sql.Date"/>
+	<field name="moto_rec_date" class="java.sql.Date"/>
+	<field name="sent_to_wwop" class="java.lang.String"/>
+	<field name="mtaxg_code" class="java.lang.String"/>
+	<field name="intl_order" class="java.lang.String"/>
+	<field name="intl_lic_no" class="java.lang.String"/>
+	<field name="currency_code" class="java.lang.String"/>
+	<field name="curr_rate_type" class="java.lang.String"/>
+	<field name="currency_rate" class="java.math.BigDecimal"/>
+	<field name="edi_sent" class="java.lang.String"/>
+	<field name="blo_exp_date" class="java.sql.Date"/>
+	<field name="dpas_rating" class="java.lang.String"/>
+	<field name="resale_cust" class="java.lang.String"/>
+	<field name="resale_po" class="java.lang.String"/>
+	<field name="actual_frght_amt" class="java.math.BigDecimal"/>
+	<field name="orig_frght_amt" class="java.math.BigDecimal"/>
+	<field name="ship_terms" class="java.lang.String"/>
+	<field name="residential_cust" class="java.lang.String"/>
+	<field name="email" class="java.lang.String"/>
+	<field name="ups_account" class="java.lang.String"/>
+	<field name="mtax_freight" class="java.lang.String"/>
+	<field name="auth_amt" class="java.math.BigDecimal"/>
+	<field name="auth_code" class="java.lang.String"/>
+	<field name="auth_date" class="java.sql.Date"/>
+	<field name="decline_code" class="java.lang.String"/>
+	<field name="decline_message" class="java.lang.String"/>
+	<field name="ship_complete" class="java.lang.String"/>
+	<field name="contract_no" class="java.lang.String"/>
+	<field name="multiple_orders" class="java.lang.String"/>
+	<field name="deposit" class="java.math.BigDecimal"/>
+	<field name="docs_sent" class="java.sql.Date"/>
+	<field name="destination" class="java.lang.String"/>
+	<field name="consignee_name" class="java.lang.String"/>
+	<field name="consignee_addr1" class="java.lang.String"/>
+	<field name="consignee_addr2" class="java.lang.String"/>
+	<field name="consignee_city" class="java.lang.String"/>
+	<field name="consignee_state" class="java.lang.String"/>
+	<field name="consignee_zip" class="java.lang.String"/>
+	<field name="consignee_country" class="java.lang.String"/>
+	<field name="notify_name" class="java.lang.String"/>
+	<field name="notify_info" class="java.lang.String"/>
+	<field name="truck_bol" class="java.lang.String"/>
+	<field name="route_code" class="java.lang.String"/>
+	<field name="resale_no" class="java.lang.String"/>
+	<field name="resale_expiry" class="java.sql.Date"/>
+	<field name="rma_reason" class="java.lang.String"/>
+	<field name="base_doc_no" class="java.lang.Integer"/>
+	<field name="rma_doc_no" class="java.lang.Integer"/>
+	<field name="order_description" class="java.lang.String"/>
+	<field name="ready_to_invoice" class="java.lang.String"/>
+	<field name="required_date" class="java.sql.Date"/>
+	<field name="default_rma_type" class="java.lang.String"/>
+	<field name="restock_fee" class="java.math.BigDecimal"/>
+	<field name="ship_to_name" class="java.lang.String"/>
+	<field name="one_time_cust" class="java.lang.String"/>
+	<field name="restock_percent" class="java.math.BigDecimal"/>
+	<field name="restock_amount" class="java.math.BigDecimal"/>
+	<field name="rma_status_code" class="java.lang.String"/>
+	<field name="ship_type" class="java.lang.String"/>
+	<field name="handling_fee" class="java.math.BigDecimal"/>
+	<field name="phone" class="java.lang.String"/>
+	<field name="split_terms_code" class="java.lang.String"/>
+	<field name="contact_name" class="java.lang.String"/>
+	<field name="contact_phone" class="java.lang.String"/>
+	<field name="fixed_price" class="java.lang.String"/>
+	<field name="rlse_no" class="java.lang.Integer"/>
+	<field name="hold_code" class="java.lang.String"/>
+	<field name="credit_approved" class="java.lang.String"/>
+	<field name="approved_by" class="java.lang.String"/>
+	<field name="date_approved" class="java.sql.Date"/>
+	<variable name="ORDER_DATE" class="java.lang.String">
+		<variableExpression><![CDATA[new SimpleDateFormat ("MM/dd/yyyy").format($F{order_date})]]></variableExpression>
+		<initialValueExpression><![CDATA[new SimpleDateFormat ("MM/dd/yyyy").format($F{order_date})]]></initialValueExpression>
+	</variable>
+	<variable name="REQUIRED_DATE" class="java.lang.String">
+		<variableExpression><![CDATA[new SimpleDateFormat ("MM/dd/yyyy").format($F{to_ship_date})]]></variableExpression>
+		<initialValueExpression><![CDATA[new SimpleDateFormat ("MM/dd/yyyy").format($F{to_ship_date})]]></initialValueExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="40" splitType="Stretch">
+			<staticText>
+				<reportElement x="167" y="8" width="221" height="24" forecolor="#3366FF" uuid="3ae6cec9-38f4-4187-8809-7fe49628442d"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="18" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Details of Late Shipments]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="30" splitType="Stretch">
+			<frame>
+				<reportElement x="0" y="0" width="555" height="30" uuid="c5b06b6d-10a0-4830-97aa-b04af33e3b91"/>
+				<staticText>
+					<reportElement x="434" y="5" width="84" height="20" uuid="66e5fdef-7c84-4775-89bc-d5e8c9a325f8"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Calibri" size="12" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Required Date]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="93" y="5" width="100" height="20" uuid="5f75ab29-b6dd-4ae6-9d9a-19ff44b55a2c"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Calibri" size="12" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Customer]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="0" y="5" width="69" height="20" uuid="d89540c8-5d92-4667-ba5d-5f9d12b156af"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Calibri" size="12" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Order No.]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="320" y="5" width="100" height="20" uuid="55872fda-66b7-4aee-873b-2bfc22841688"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Calibri" size="12" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Order Date]]></text>
+				</staticText>
+				<line>
+					<reportElement x="0" y="27" width="550" height="1" uuid="47a81069-04a5-49bd-bdaa-9326a76aca30"/>
+				</line>
+			</frame>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="30" splitType="Stretch">
+			<textField>
+				<reportElement x="93" y="5" width="200" height="20" uuid="74c641b9-228d-4676-bf02-0c752fab29c7"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Calibri" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{bus_name}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="5" width="69" height="20" uuid="b9797c57-887e-4f3e-ac2a-a11f3d90ac13"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{order_no}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="320" y="5" width="100" height="20" uuid="77879396-b2cc-4a57-a3fd-277492e65582"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Calibri"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{ORDER_DATE}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="434" y="5" width="100" height="20" uuid="2d13ccf7-2206-4cb1-989c-5bf8c99579dc"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Calibri"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{REQUIRED_DATE}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

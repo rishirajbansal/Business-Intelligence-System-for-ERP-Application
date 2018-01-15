@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ActualVsProjectedSales" language="groovy" pageWidth="600" pageHeight="360" columnWidth="580" leftMargin="10" rightMargin="10" topMargin="10" bottomMargin="10" uuid="1008f5c2-9536-4ba4-bc55-4a4468e78c97">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="YEAR" class="java.lang.String">
+		<defaultValueExpression><![CDATA["2013"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="PERIOD" class="java.lang.String">
+		<defaultValueExpression><![CDATA["07"]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT stiprsld.item_class AS item_class, sum(stoshipd.net_amount) AS actual, stiprsld.sales_projection AS projected FROM stoordre, stoshipd, stoinvce, stiinvtr, stxperdr, stiprslr, stiprsld
+WHERE stoordre.doc_no = stoshipd.doc_no
+    AND stoinvce.inv_doc_no = stoshipd.inv_doc_no
+    AND stoshipd.item_code = stiinvtr.item_code
+    AND stiprsld.period_year = stxperdr.period_year
+    AND stiprsld.period = stxperdr.period
+    AND stiprsld.item_class = stiinvtr.item_class
+    AND stiprsld.period_year = stiprslr.period_year
+    AND stiprsld.period = stiprslr.period
+    AND stoinvce.inv_date >= stxperdr.start_date
+    AND stoinvce.inv_date <= stxperdr.end_date
+    AND stoshipd.stage = 'PST'
+    AND stxperdr.period_year = $P{YEAR}
+    AND stxperdr.period = $P{PERIOD}
+    GROUP BY stiprsld.item_class, stiprsld.sales_projection]]>
+	</queryString>
+	<field name="item_class" class="java.lang.String"/>
+	<field name="actual" class="java.math.BigDecimal"/>
+	<field name="projected" class="java.math.BigDecimal"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band splitType="Stretch"/>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="340" splitType="Stretch">
+			<barChart>
+				<chart>
+					<reportElement x="0" y="0" width="580" height="340" uuid="e1c07524-389b-4e9e-a1c2-b509fc8c065a"/>
+					<box topPadding="3" leftPadding="3" bottomPadding="3" rightPadding="3">
+						<pen lineWidth="1.0" lineColor="#3366FF"/>
+						<topPen lineWidth="1.0" lineColor="#3366FF"/>
+						<leftPen lineWidth="1.0" lineColor="#3366FF"/>
+						<bottomPen lineWidth="1.0" lineColor="#3366FF"/>
+						<rightPen lineWidth="1.0" lineColor="#3366FF"/>
+					</box>
+					<chartTitle color="#3366FF">
+						<font fontName="Calibri" size="16" isBold="true"/>
+						<titleExpression><![CDATA["Actual vs Projected Sales"]]></titleExpression>
+					</chartTitle>
+					<chartSubtitle>
+						<font fontName="Calibri" size="12"/>
+						<subtitleExpression><![CDATA["Period : " + $P{PERIOD} + "\n" +
+"Year : " + $P{YEAR}]]></subtitleExpression>
+					</chartSubtitle>
+					<chartLegend position="Right">
+						<font size="12"/>
+					</chartLegend>
+				</chart>
+				<categoryDataset>
+					<categorySeries>
+						<seriesExpression><![CDATA["Actual"]]></seriesExpression>
+						<categoryExpression><![CDATA[$F{item_class}]]></categoryExpression>
+						<valueExpression><![CDATA[$F{actual}]]></valueExpression>
+						<labelExpression><![CDATA["Actual"]]></labelExpression>
+						<itemHyperlink hyperlinkType="ReportExecution" hyperlinkTarget="Blank">
+							<hyperlinkParameter name="_report">
+								<hyperlinkParameterExpression><![CDATA["/FourthGeneration/Reports/DrillDown_Level1__Actual_vs_Projected_Sales"]]></hyperlinkParameterExpression>
+							</hyperlinkParameter>
+							<hyperlinkParameter name="YEAR">
+								<hyperlinkParameterExpression><![CDATA[$P{YEAR}]]></hyperlinkParameterExpression>
+							</hyperlinkParameter>
+							<hyperlinkParameter name="PERIOD">
+								<hyperlinkParameterExpression><![CDATA[$P{PERIOD}]]></hyperlinkParameterExpression>
+							</hyperlinkParameter>
+							<hyperlinkParameter name="ITEM_CLASS">
+								<hyperlinkParameterExpression><![CDATA[$F{item_class}.trim()]]></hyperlinkParameterExpression>
+							</hyperlinkParameter>
+						</itemHyperlink>
+					</categorySeries>
+					<categorySeries>
+						<seriesExpression><![CDATA["Projected"]]></seriesExpression>
+						<categoryExpression><![CDATA[$F{item_class}]]></categoryExpression>
+						<valueExpression><![CDATA[$F{projected}]]></valueExpression>
+						<labelExpression><![CDATA["Projected"]]></labelExpression>
+						<itemHyperlink hyperlinkType="ReportExecution" hyperlinkTarget="Blank">
+							<hyperlinkParameter name="_report">
+								<hyperlinkParameterExpression><![CDATA["/FourthGeneration/Reports/DrillDown_Level1__Actual_vs_Projected_Sales"]]></hyperlinkParameterExpression>
+							</hyperlinkParameter>
+							<hyperlinkParameter name="YEAR">
+								<hyperlinkParameterExpression><![CDATA[$P{YEAR}]]></hyperlinkParameterExpression>
+							</hyperlinkParameter>
+							<hyperlinkParameter name="PERIOD">
+								<hyperlinkParameterExpression><![CDATA[$P{PERIOD}]]></hyperlinkParameterExpression>
+							</hyperlinkParameter>
+							<hyperlinkParameter name="ITEM_CLASS">
+								<hyperlinkParameterExpression><![CDATA[$F{item_class}.trim()]]></hyperlinkParameterExpression>
+							</hyperlinkParameter>
+						</itemHyperlink>
+					</categorySeries>
+				</categoryDataset>
+				<barPlot>
+					<plot>
+						<seriesColor seriesOrder="0" color="#3366FF"/>
+						<seriesColor seriesOrder="1" color="#990033"/>
+					</plot>
+					<itemLabel/>
+					<categoryAxisFormat>
+						<axisFormat/>
+					</categoryAxisFormat>
+					<valueAxisFormat>
+						<axisFormat/>
+					</valueAxisFormat>
+				</barPlot>
+			</barChart>
+		</band>
+	</summary>
+</jasperReport>

@@ -1,0 +1,342 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="drilldown_level1_ActualVsProjectedSales" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="9403dca6-58e4-4094-897f-9ea66c721a52">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<parameter name="YEAR" class="java.lang.String">
+		<defaultValueExpression><![CDATA["2013"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="PERIOD" class="java.lang.String">
+		<defaultValueExpression><![CDATA["07"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ITEM_CLASS" class="java.lang.String">
+		<defaultValueExpression><![CDATA["AUDIO"]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT (NVL(MTD_Sales,0) - NVL(MTD_credit_memos,0)) AS NET_MTD_Sales, (NVL(margin,0) - NVL(credit_memos_margin,0)) AS NET_margin,
+stiprsld.sales_projection AS projected_sales, stiprsld.period AS period, stiprsld.period_year AS period_year, stiprsld.item_class AS item_class,
+(( (NVL(margin,0) - NVL(credit_memos_margin,0)) * 100 ) / (NVL(MTD_Sales,0) - NVL(MTD_credit_memos,0)) ) AS perct_margin,
+((NVL(MTD_Sales,0) - NVL(MTD_credit_memos,0)) - stiprsld.sales_projection)  AS variance
+FROM stiprsld,
+(SELECT SUM(stoshipd.net_amount) AS MTD_Sales, SUM(stoshipd.gross_margin) AS margin
+FROM stoordre, stoshipd, stoinvce, stiinvtr, stxperdr
+WHERE stoshipd.inv_doc_no = stoinvce.inv_doc_no
+AND stoordre.doc_no = stoshipd.doc_no
+AND stoshipd.item_code = stiinvtr.item_code
+AND stoshipd.stage = 'PST'
+AND stoordre.like_type != 'CRM'
+AND stoinvce.inv_date >= stxperdr.start_date
+AND stoinvce.inv_date <= stxperdr.end_date
+AND stxperdr.period_year = $P{YEAR}
+AND stxperdr.period = $P{PERIOD}
+AND stiinvtr.item_class = $P{ITEM_CLASS}),
+(SELECT SUM(stoshipd.net_amount) AS MTD_credit_memos, SUM(stoshipd.gross_margin) AS credit_memos_margin
+FROM stoordre, stoshipd, stoinvce, stiinvtr, stxperdr
+WHERE stoshipd.inv_doc_no = stoinvce.inv_doc_no
+AND stoordre.doc_no = stoshipd.doc_no
+AND stoshipd.item_code = stiinvtr.item_code
+AND stoshipd.stage = 'PST'
+AND stoordre.like_type = 'CRM'
+AND stoinvce.inv_date >= stxperdr.start_date
+AND stoinvce.inv_date <= stxperdr.end_date
+AND stxperdr.period_year = $P{YEAR}
+AND stxperdr.period = $P{PERIOD}
+AND stiinvtr.item_class = $P{ITEM_CLASS})
+WHERE stiprsld.period = $P{PERIOD}
+AND stiprsld.period_year = $P{YEAR}
+AND stiprsld.item_class = $P{ITEM_CLASS}]]>
+	</queryString>
+	<field name="net_mtd_sales" class="java.math.BigDecimal"/>
+	<field name="net_margin" class="java.math.BigDecimal"/>
+	<field name="projected_sales" class="java.math.BigDecimal"/>
+	<field name="period" class="java.lang.String"/>
+	<field name="period_year" class="java.lang.String"/>
+	<field name="item_class" class="java.lang.String"/>
+	<field name="perct_margin" class="java.math.BigDecimal"/>
+	<field name="variance" class="java.math.BigDecimal"/>
+	<variable name="percent_margin" class="java.lang.String">
+		<variableExpression><![CDATA[$F{perct_margin}.setScale( 2, RoundingMode.HALF_UP )]]></variableExpression>
+		<initialValueExpression><![CDATA[$F{perct_margin}.setScale( 2, RoundingMode.HALF_UP )]]></initialValueExpression>
+	</variable>
+	<variable name="MTD_sales" class="java.lang.String">
+		<variableExpression><![CDATA[$F{net_mtd_sales}.setScale( 2, RoundingMode.HALF_UP )]]></variableExpression>
+		<initialValueExpression><![CDATA[$F{net_mtd_sales}.setScale( 2, RoundingMode.HALF_UP )]]></initialValueExpression>
+	</variable>
+	<variable name="margin" class="java.lang.String">
+		<variableExpression><![CDATA[$F{net_margin}.setScale( 2, RoundingMode.HALF_UP )]]></variableExpression>
+		<initialValueExpression><![CDATA[$F{net_margin}.setScale( 2, RoundingMode.HALF_UP )]]></initialValueExpression>
+	</variable>
+	<variable name="v_projected_sales" class="java.lang.String">
+		<variableExpression><![CDATA[$F{projected_sales}.setScale( 2, RoundingMode.HALF_UP )]]></variableExpression>
+		<initialValueExpression><![CDATA[$F{projected_sales}.setScale( 2, RoundingMode.HALF_UP )]]></initialValueExpression>
+	</variable>
+	<variable name="v_variance" class="java.lang.String">
+		<variableExpression><![CDATA[$F{variance}.setScale( 2, RoundingMode.HALF_UP )]]></variableExpression>
+		<initialValueExpression><![CDATA[$F{variance}.setScale( 2, RoundingMode.HALF_UP )]]></initialValueExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="63" splitType="Stretch">
+			<frame>
+				<reportElement x="26" y="0" width="529" height="35" uuid="c1edbe61-b0e5-4820-ad10-577dba6c5769"/>
+				<staticText>
+					<reportElement x="101" y="0" width="326" height="35" forecolor="#3366FF" uuid="bdaba772-37eb-42a9-a6c3-b1bb05e0b772"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Calibri" size="24" isBold="false"/>
+					</textElement>
+					<text><![CDATA[Details of the selected item class]]></text>
+				</staticText>
+			</frame>
+			<textField>
+				<reportElement x="79" y="40" width="100" height="20" uuid="912fa988-3b9d-4235-b75a-ac24de52871d"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Calibri" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{period}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="253" y="40" width="100" height="20" uuid="8c8ee0bd-0494-4338-ab62-631b2e1b702c"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Calibri" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{period_year}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="29" y="40" width="50" height="20" uuid="ff9b5b24-6967-4f31-a16b-e77256bf0774"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Calibri" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Period : ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="215" y="40" width="38" height="20" uuid="9e7a2124-f863-4508-b315-f2063df8975f"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Calibri" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Year : ]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="30" splitType="Stretch">
+			<frame>
+				<reportElement mode="Opaque" x="0" y="0" width="555" height="30" uuid="267ee3c2-61bb-4f69-966c-a67254535ada"/>
+				<staticText>
+					<reportElement mode="Opaque" x="0" y="5" width="93" height="20" forecolor="#FFFFFF" backcolor="#0066FF" uuid="6af2892d-06e7-4419-a714-c1130cdf8f13"/>
+					<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2">
+						<pen lineColor="#000000"/>
+						<topPen lineWidth="0.25" lineColor="#000000"/>
+						<leftPen lineWidth="0.25" lineColor="#000000"/>
+						<bottomPen lineWidth="0.25" lineColor="#000000"/>
+						<rightPen lineWidth="0.25" lineColor="#000000"/>
+					</box>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Calibri" size="12" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Item Class]]></text>
+				</staticText>
+				<staticText>
+					<reportElement mode="Opaque" x="93" y="5" width="108" height="20" forecolor="#FFFFFF" backcolor="#0066FF" uuid="c51ba5e3-96c1-4549-8132-05375c31b7d4"/>
+					<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2">
+						<pen lineColor="#000000"/>
+						<topPen lineWidth="0.25" lineColor="#000000"/>
+						<leftPen lineWidth="0.25" lineColor="#000000"/>
+						<bottomPen lineWidth="0.25" lineColor="#000000"/>
+						<rightPen lineWidth="0.25" lineColor="#000000"/>
+					</box>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Calibri" size="12" isBold="true"/>
+					</textElement>
+					<text><![CDATA[MTD Sales]]></text>
+				</staticText>
+				<staticText>
+					<reportElement mode="Opaque" x="201" y="5" width="101" height="20" forecolor="#FFFFFF" backcolor="#0066FF" uuid="5d3731b1-5549-4ccf-a2da-aa19b3bc4e0c"/>
+					<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2">
+						<pen lineColor="#000000"/>
+						<topPen lineWidth="0.25" lineColor="#000000"/>
+						<leftPen lineWidth="0.25" lineColor="#000000"/>
+						<bottomPen lineWidth="0.25" lineColor="#000000"/>
+						<rightPen lineWidth="0.25" lineColor="#000000"/>
+					</box>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Calibri" size="12" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Margin]]></text>
+				</staticText>
+				<staticText>
+					<reportElement mode="Opaque" x="302" y="5" width="90" height="20" forecolor="#FFFFFF" backcolor="#0066FF" uuid="e450bf62-7db4-42d8-bbac-6dbff83e496e"/>
+					<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2">
+						<pen lineColor="#000000"/>
+						<topPen lineWidth="0.25" lineColor="#000000"/>
+						<leftPen lineWidth="0.25" lineColor="#000000"/>
+						<bottomPen lineWidth="0.25" lineColor="#000000"/>
+						<rightPen lineWidth="0.25" lineColor="#000000"/>
+					</box>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Calibri" size="12" isBold="true"/>
+					</textElement>
+					<text><![CDATA[% Margin]]></text>
+				</staticText>
+				<staticText>
+					<reportElement mode="Opaque" x="392" y="5" width="87" height="20" forecolor="#FFFFFF" backcolor="#0066FF" uuid="32765aff-5177-4afe-a2d7-66c19fc22c50"/>
+					<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2">
+						<pen lineColor="#000000"/>
+						<topPen lineWidth="0.25" lineColor="#000000"/>
+						<leftPen lineWidth="0.25" lineColor="#000000"/>
+						<bottomPen lineWidth="0.25" lineColor="#000000"/>
+						<rightPen lineWidth="0.25" lineColor="#000000"/>
+					</box>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Calibri" size="12" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Projected Sales]]></text>
+				</staticText>
+				<staticText>
+					<reportElement mode="Opaque" x="479" y="5" width="76" height="20" forecolor="#FFFFFF" backcolor="#0066FF" uuid="06ba81ae-8cf4-4be2-93e7-97453d78527f"/>
+					<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2">
+						<pen lineColor="#000000"/>
+						<topPen lineWidth="0.25" lineColor="#000000"/>
+						<leftPen lineWidth="0.25" lineColor="#000000"/>
+						<bottomPen lineWidth="0.25" lineColor="#000000"/>
+						<rightPen lineWidth="0.25" lineColor="#000000"/>
+					</box>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Calibri" size="12" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Variance]]></text>
+				</staticText>
+				<line>
+					<reportElement x="0" y="27" width="555" height="1" uuid="3504ad66-9e05-49de-90c9-5aa82cd6b4a5"/>
+				</line>
+			</frame>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="30" splitType="Stretch">
+			<textField hyperlinkType="ReportExecution" hyperlinkTarget="Blank">
+				<reportElement mode="Opaque" x="0" y="5" width="93" height="20" forecolor="#FFFFFF" backcolor="#3399FF" uuid="7f4d194d-8020-49ad-939c-91c557e93496"/>
+				<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Calibri" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{item_class}]]></textFieldExpression>
+				<hyperlinkParameter name="_report">
+					<hyperlinkParameterExpression><![CDATA["/FourthGeneration/Reports/DrillDown__Level2__Actual_vs_Projected_Sales"]]></hyperlinkParameterExpression>
+				</hyperlinkParameter>
+				<hyperlinkParameter name="ITEM_CLASS">
+					<hyperlinkParameterExpression><![CDATA[$F{item_class}.trim()]]></hyperlinkParameterExpression>
+				</hyperlinkParameter>
+				<hyperlinkParameter name="YEAR">
+					<hyperlinkParameterExpression><![CDATA[$P{YEAR}]]></hyperlinkParameterExpression>
+				</hyperlinkParameter>
+				<hyperlinkParameter name="PERIOD">
+					<hyperlinkParameterExpression><![CDATA[$P{PERIOD}]]></hyperlinkParameterExpression>
+				</hyperlinkParameter>
+			</textField>
+			<textField>
+				<reportElement mode="Opaque" x="302" y="5" width="90" height="20" forecolor="#FFFFFF" backcolor="#3399FF" uuid="877027c5-a035-4f44-97ad-57c001331170"/>
+				<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Calibri" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{percent_margin}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Opaque" x="93" y="5" width="108" height="20" forecolor="#FFFFFF" backcolor="#3399FF" uuid="11668659-1d36-4a64-8714-f2aa50a3d7ae"/>
+				<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Calibri" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{MTD_sales}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Opaque" x="201" y="5" width="101" height="20" forecolor="#FFFFFF" backcolor="#3399FF" uuid="bba6067b-b9f1-45bb-a95b-9db0951fa98d"/>
+				<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Calibri" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{margin}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Opaque" x="392" y="5" width="87" height="20" forecolor="#FFFFFF" backcolor="#3399FF" uuid="3b88b12a-0417-4eea-8a3c-2a263b1b003e"/>
+				<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Calibri" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{v_projected_sales}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Opaque" x="479" y="5" width="76" height="20" forecolor="#FFFFFF" backcolor="#3399FF" uuid="6b49da44-108d-42b1-875c-01e65121c00c"/>
+				<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Calibri" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{v_variance}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

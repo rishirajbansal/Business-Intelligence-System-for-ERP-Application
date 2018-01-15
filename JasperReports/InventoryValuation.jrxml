@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="InventoryValuation" language="groovy" pageWidth="450" pageHeight="360" columnWidth="430" leftMargin="10" rightMargin="10" topMargin="10" bottomMargin="10" uuid="a713c0aa-d020-4fbd-b9dd-ed83506ac967">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="WAREHOUSE_CODE" class="java.lang.String">
+		<defaultValueExpression><![CDATA["SEATTLE"]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT stiinvtr.item_class, SUM(stilocar.qty_on_hand * stilocar.avg_unit_cost) AS valuation  FROM stiinvtr, stilocar WHERE stiinvtr.item_code = stilocar.item_code AND warehouse_CODE = $P{WAREHOUSE_CODE} AND stilocar.qty_on_hand > 0 GROUP BY item_class
+]]>
+	</queryString>
+	<field name="item_class" class="java.lang.String"/>
+	<field name="valuation" class="java.math.BigDecimal"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band splitType="Stretch"/>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="340" splitType="Stretch">
+			<pieChart>
+				<chart>
+					<reportElement x="0" y="0" width="430" height="340" uuid="902bc993-3075-4c4d-82a7-93cad2fb672b"/>
+					<box topPadding="3" leftPadding="3" bottomPadding="3" rightPadding="3">
+						<pen lineWidth="1.0" lineStyle="Double" lineColor="#3366FF"/>
+						<topPen lineWidth="1.0" lineStyle="Double" lineColor="#3366FF"/>
+						<leftPen lineWidth="1.0" lineStyle="Double" lineColor="#3366FF"/>
+						<bottomPen lineWidth="1.0" lineStyle="Double" lineColor="#3366FF"/>
+						<rightPen lineWidth="1.0" lineStyle="Double" lineColor="#3366FF"/>
+					</box>
+					<chartTitle color="#3366FF">
+						<font fontName="Calibri" size="16" isBold="true"/>
+						<titleExpression><![CDATA["Inventory Valuation by Product Class"]]></titleExpression>
+					</chartTitle>
+					<chartSubtitle>
+						<font fontName="Calibri" size="12"/>
+						<subtitleExpression><![CDATA["Warehouse : " + $P{WAREHOUSE_CODE}]]></subtitleExpression>
+					</chartSubtitle>
+					<chartLegend position="Bottom"/>
+				</chart>
+				<pieDataset>
+					<keyExpression><![CDATA["["+$F{item_class}+" - \$" + $F{valuation} + "]"]]></keyExpression>
+					<valueExpression><![CDATA[$F{valuation}]]></valueExpression>
+					<labelExpression><![CDATA[$F{item_class}]]></labelExpression>
+					<sectionHyperlink hyperlinkType="ReportExecution" hyperlinkTarget="Blank">
+						<hyperlinkParameter name="_report">
+							<hyperlinkParameterExpression><![CDATA["/FourthGeneration/Reports/DrillDown__Inventory_Valuation__Items_List"]]></hyperlinkParameterExpression>
+						</hyperlinkParameter>
+						<hyperlinkParameter name="WAREHOUSE_CODE">
+							<hyperlinkParameterExpression><![CDATA[$P{WAREHOUSE_CODE}]]></hyperlinkParameterExpression>
+						</hyperlinkParameter>
+						<hyperlinkParameter name="ITEM_CLASS">
+							<hyperlinkParameterExpression><![CDATA[$F{item_class}.trim()]]></hyperlinkParameterExpression>
+						</hyperlinkParameter>
+					</sectionHyperlink>
+				</pieDataset>
+				<piePlot isShowLabels="true" isCircular="true">
+					<plot/>
+					<itemLabel/>
+				</piePlot>
+			</pieChart>
+		</band>
+	</summary>
+</jasperReport>

@@ -1,0 +1,73 @@
+CREATE FUNCTION fourthgeneration_db:PERCENT_ONTIME_CUSTOMERSHIPMENTS (year INT, month INT, warehouse CHAR(500) )
+RETURNING decimal;
+DEFINE v_total_monthly_orders INT;
+DEFINE v_shipped_on_time INT;
+DEFINE v_percentage decimal;
+	--insert function body here
+	
+	SELECT count(*) AS totalmonthlyorders, shipped_on_time, ((shipped_on_time * 100) / count(*))
+	INTO v_total_monthly_orders, v_shipped_on_time, v_percentage
+	FROM stoordre,
+	(SELECT count(dayslate) AS shipped_on_time  FROM 
+	(SELECT (ship_date - to_ship_date) AS dayslate FROM stoordre WHERE like_type = 'REG' AND warehouse_code = warehouse AND  TO_CHAR(order_date, '%Y') = year AND ship_date IS NOT NULL  AND MONTH(order_date) = month)
+	WHERE dayslate <= 0)
+	WHERE like_type = 'REG' AND warehouse_code = warehouse AND  TO_CHAR(order_date, '%Y') = year AND ship_date IS NOT NULL  AND MONTH(order_date) = month GROUP BY shipped_on_time;
+	
+
+	RETURN v_percentage;
+	
+	
+END FUNCTION;
+
+
+
+
+CREATE FUNCTION two_returns (stockno INT)  RETURNING CHAR (15);
+   DEFINE des CHAR(15);
+  
+   
+END FUNCTION;
+
+DROP FUNCTION fourthgeneration_db:CUSTOMER_NAME;
+
+
+
+
+CREATE FUNCTION fourthgeneration_db:PERCENT_ONTIME_VENDORDELIVERIES (year INT, month INT, warehouse CHAR(500) )
+RETURNING decimal;
+DEFINE v_total_monthly_orders INT;
+DEFINE v_shipped_on_time INT;
+DEFINE v_percentage decimal;
+	--insert function body here
+	
+	SELECT count(*) AS totalmonthlyorders, shipped_on_time, ((shipped_on_time * 100) / count(*)) 
+	INTO v_total_monthly_orders, v_shipped_on_time, v_percentage
+	FROM stuordre,
+	(SELECT count(dayslate) AS shipped_on_time  FROM 
+	(SELECT (ship_date - required_date) AS dayslate FROM stuordre WHERE po_type = 'REG' AND whse_shipto = warehouse AND  TO_CHAR(po_date, '%Y') = year AND ship_date IS NOT NULL  AND MONTH(po_date) = month)
+	WHERE dayslate <= 0 )
+	WHERE po_type = 'REG' AND whse_shipto = warehouse AND  TO_CHAR(po_date, '%Y') = year AND ship_date IS NOT NULL  AND MONTH(po_date) = month GROUP BY shipped_on_time;
+
+
+	RETURN v_percentage;
+	
+	
+END FUNCTION;
+
+
+CREATE FUNCTION fourthgeneration_db:CUSTOMER_NAME (billCode CHAR (50))
+RETURNING CHAR (500);
+DEFINE v_customerName CHAR (500);
+
+	--insert function body here
+	
+	SELECT DISTINCT bus_name 
+	INTO v_customerName
+	FROM stoordre
+	WHERE bill_to_code = ();
+
+
+	RETURN v_customerName;
+	
+	
+END FUNCTION;

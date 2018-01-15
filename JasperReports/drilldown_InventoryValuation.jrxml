@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="drilldown_InventoryValuation" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="8a8b7634-4a84-43e2-8fc2-9920d840d6e0">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="WAREHOUSE_CODE" class="java.lang.String">
+		<defaultValueExpression><![CDATA["SEATTLE"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ITEM_CLASS" class="java.lang.String">
+		<defaultValueExpression><![CDATA["COMP"]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT stiinvtr.item_code, stiinvtr.desc1, stiinvtr.desc2, stilocar.qty_on_hand , (stilocar.qty_on_hand * stilocar.avg_unit_cost) AS valuation  FROM stiinvtr, stilocar WHERE stiinvtr.item_code = stilocar.item_code AND warehouse_CODE = $P{WAREHOUSE_CODE} AND item_class = $P{ITEM_CLASS} AND stilocar.qty_on_hand > 0]]>
+	</queryString>
+	<field name="item_code" class="java.lang.String"/>
+	<field name="desc1" class="java.lang.String"/>
+	<field name="desc2" class="java.lang.String"/>
+	<field name="qty_on_hand" class="java.math.BigDecimal"/>
+	<field name="valuation" class="java.math.BigDecimal"/>
+	<variable name="DESCRIPTION2" class="java.lang.String">
+		<variableExpression><![CDATA[( $F{desc2} == null ? "NA" : $F{desc2} )]]></variableExpression>
+		<initialValueExpression><![CDATA[( $F{desc2} == null ? "NA" : $F{desc2} )]]></initialValueExpression>
+	</variable>
+	<variable name="VALUATION" class="java.lang.String">
+		<variableExpression><![CDATA["\$" + $F{valuation}]]></variableExpression>
+		<initialValueExpression><![CDATA["\$" + $F{valuation}]]></initialValueExpression>
+	</variable>
+	<variable name="DESCRIPTION1" class="java.lang.String">
+		<variableExpression><![CDATA[( $F{desc1} == null ? "NA" : $F{desc1} )]]></variableExpression>
+		<initialValueExpression><![CDATA[( $F{desc1} == null ? "NA" : $F{desc1} )]]></initialValueExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="40" splitType="Stretch">
+			<frame>
+				<reportElement x="13" y="0" width="529" height="35" uuid="2f3a9194-62c8-4091-98f3-36c8a61a386a"/>
+				<staticText>
+					<reportElement x="58" y="0" width="323" height="35" forecolor="#3366FF" uuid="58a36853-2b4f-44ca-b9aa-73edc45de583"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Calibri" size="24" isBold="false"/>
+					</textElement>
+					<text><![CDATA[List of items in the product class ]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="381" y="0" width="148" height="35" forecolor="#3366FF" uuid="0c92dcf1-d69b-46ac-ae1f-169000802918"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Calibri" size="22" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{ITEM_CLASS}]]></textFieldExpression>
+				</textField>
+			</frame>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="30" splitType="Stretch">
+			<frame>
+				<reportElement x="0" y="0" width="555" height="30" uuid="e2147473-6fa5-4dd6-91d4-d3a3123e4350"/>
+				<staticText>
+					<reportElement x="0" y="5" width="64" height="20" uuid="bcb110da-a93d-4dbe-b9b1-b046a0fa9f45"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Calibri" size="12" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Item]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="64" y="5" width="180" height="20" uuid="edfd7ebb-6152-49d2-9f54-129d20bb8c5e"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Calibri" size="12" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Desc 1]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="474" y="5" width="81" height="20" uuid="27a3eefb-139a-406c-84ad-fd0362c77bd8"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Calibri" size="12" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Valuation]]></text>
+				</staticText>
+				<line>
+					<reportElement x="0" y="27" width="555" height="1" uuid="59a3fb89-dc42-47d4-9c9e-440febe50272"/>
+				</line>
+				<staticText>
+					<reportElement x="244" y="5" width="140" height="20" uuid="8c9926a6-13ca-4872-ae07-84d16f8e0b16"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Calibri" size="12" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Desc 2]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="384" y="5" width="90" height="20" uuid="0e2e95e6-95b4-4087-bf3d-d677742e19bf"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Calibri" size="12" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Quantity on Hand]]></text>
+				</staticText>
+			</frame>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="30" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="5" width="64" height="20" uuid="f70e5cfd-8818-476c-a158-dad687a09ccc"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Calibri"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{item_code}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="384" y="5" width="90" height="20" uuid="0a9b7c9f-03c3-4cc0-b01b-9fed6febedfe"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{qty_on_hand}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="244" y="5" width="140" height="20" uuid="784c1554-a197-442e-aa72-937daec2c0f2"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Calibri"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{DESCRIPTION2}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="474" y="5" width="81" height="20" uuid="69dc0dd3-d86d-4620-8dda-e376ebb8a8da"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Calibri"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{VALUATION}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="64" y="5" width="180" height="20" uuid="5392bc24-7bc3-4e58-9169-3510563b9337"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Calibri"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{DESCRIPTION1}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

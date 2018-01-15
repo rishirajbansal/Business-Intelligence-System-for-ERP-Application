@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Key_Metrics" pageWidth="1050" pageHeight="110" orientation="Landscape" columnWidth="1030" leftMargin="10" rightMargin="10" topMargin="10" bottomMargin="10" uuid="61494213-b46c-4919-b514-2d360590c2e2">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<subDataset name="orders_booked_today" uuid="dee45b70-7f81-486d-806d-2d6068ccb46a">
+		<queryString language="SQL">
+			<![CDATA[SELECT count (*) AS booked_orders FROM stoordre WHERE order_date = TODAY AND like_type = 'REG']]>
+		</queryString>
+		<field name="booked_orders" class="java.math.BigDecimal"/>
+	</subDataset>
+	<subDataset name="late_shipments" uuid="6b646208-6c6a-4965-a8b1-562604eb345f">
+		<queryString>
+			<![CDATA[SELECT count (*) AS late_shipments FROM stoordre WHERE order_status = 'ACT' AND like_type = 'REG' AND required_date > order_date]]>
+		</queryString>
+		<field name="late_shipments" class="java.math.BigDecimal"/>
+	</subDataset>
+	<subDataset name="backordered_amount" uuid="adb19396-a381-46b4-921c-bef524907eee">
+		<queryString>
+			<![CDATA[SELECT sum (net_amount) AS backordered_amount  FROM stoshipd WHERE stage = 'BKO']]>
+		</queryString>
+		<field name="backordered_amount" class="java.math.BigDecimal"/>
+		<variable name="backorder_dollars" class="java.lang.String">
+			<variableExpression><![CDATA[(NumberFormat.getCurrencyInstance(Locale.US)).format( $F{backordered_amount}.doubleValue() )]]></variableExpression>
+		</variable>
+	</subDataset>
+	<queryString>
+		<![CDATA[SELECT tabname FROM systables;]]>
+	</queryString>
+	<field name="tabname" class="java.lang.String"/>
+	<group name="Test"/>
+	<group name="Key Metrics">
+		<groupHeader>
+			<band height="55">
+				<frame>
+					<reportElement x="0" y="0" width="1030" height="45" uuid="7f705fc3-e3fd-463e-9f00-2a17388b38b4"/>
+					<staticText>
+						<reportElement x="10" y="10" width="156" height="25" forecolor="#3366FF" uuid="4ab02368-7091-4d8d-9085-7c27e1eafc61"/>
+						<textElement verticalAlignment="Middle">
+							<font fontName="Calibri" size="16"/>
+						</textElement>
+						<text><![CDATA[Orders booked today : ]]></text>
+					</staticText>
+					<componentElement>
+						<reportElement x="166" y="10" width="50" height="25" forecolor="#3366FF" uuid="744f6796-92cd-47bc-9477-99789bb64be9"/>
+						<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" printOrder="Vertical">
+							<datasetRun subDataset="orders_booked_today" uuid="036543d0-8622-4dea-935c-84cc1fc0868e">
+								<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+							</datasetRun>
+							<jr:listContents height="25" width="50">
+								<textField hyperlinkType="ReportExecution" hyperlinkTarget="Blank">
+									<reportElement x="0" y="0" width="50" height="25" forecolor="#3366FF" uuid="725a3f42-b49f-42e9-9b2d-053989dbb45a"/>
+									<textElement verticalAlignment="Middle">
+										<font fontName="Calibri" size="16" isBold="true"/>
+									</textElement>
+									<textFieldExpression><![CDATA[$F{booked_orders}]]></textFieldExpression>
+									<hyperlinkParameter name="_report">
+										<hyperlinkParameterExpression><![CDATA["/FourthGeneration/Reports/KeyMetrics__Details_of_Booked_Orders"]]></hyperlinkParameterExpression>
+									</hyperlinkParameter>
+								</textField>
+							</jr:listContents>
+						</jr:list>
+					</componentElement>
+					<staticText>
+						<reportElement x="422" y="10" width="156" height="25" forecolor="#3366FF" uuid="2886cfd4-3583-4af9-8381-d0449d101b01"/>
+						<textElement verticalAlignment="Middle">
+							<font fontName="Calibri" size="16"/>
+						</textElement>
+						<text><![CDATA[Orders Late Shipping : ]]></text>
+					</staticText>
+					<componentElement>
+						<reportElement x="578" y="10" width="44" height="25" forecolor="#3366FF" uuid="c45c521c-eeba-47d5-be5f-647e5cc0f948"/>
+						<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" printOrder="Vertical">
+							<datasetRun subDataset="late_shipments" uuid="41978eb5-84d7-4205-9e4a-d6f63ec18f95">
+								<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+							</datasetRun>
+							<jr:listContents height="25" width="44">
+								<textField hyperlinkType="ReportExecution" hyperlinkTarget="Blank">
+									<reportElement x="0" y="0" width="44" height="25" forecolor="#3366FF" uuid="c1aca062-9210-436b-a2d9-2455d954d498"/>
+									<textElement verticalAlignment="Middle">
+										<font fontName="Calibri" size="16" isBold="true"/>
+									</textElement>
+									<textFieldExpression><![CDATA[$F{late_shipments}]]></textFieldExpression>
+									<hyperlinkParameter name="_report">
+										<hyperlinkParameterExpression><![CDATA["/FourthGeneration/Reports/KeyMetrics__Details_of_Late_Shipments"]]></hyperlinkParameterExpression>
+									</hyperlinkParameter>
+								</textField>
+							</jr:listContents>
+						</jr:list>
+					</componentElement>
+					<staticText>
+						<reportElement x="721" y="10" width="202" height="25" forecolor="#3366FF" uuid="90b03f36-7d0f-4a2a-9c15-88616cd10a35"/>
+						<textElement verticalAlignment="Middle">
+							<font fontName="Calibri" size="16"/>
+						</textElement>
+						<text><![CDATA[Total Dollars on Backorderd : ]]></text>
+					</staticText>
+					<componentElement>
+						<reportElement x="923" y="10" width="90" height="25" forecolor="#3366FF" uuid="32dbe3dd-bf05-4672-8cc2-27b83daf1c8b"/>
+						<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" printOrder="Vertical">
+							<datasetRun subDataset="backordered_amount" uuid="118d9d11-4fc0-4b75-843e-6fc6f4ba180f">
+								<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+							</datasetRun>
+							<jr:listContents height="25" width="90">
+								<textField hyperlinkType="ReportExecution" hyperlinkTarget="Blank">
+									<reportElement x="0" y="0" width="90" height="25" forecolor="#3366FF" uuid="a4307cee-e543-49e2-9f42-d76a74fd3d7e"/>
+									<textElement verticalAlignment="Middle">
+										<font fontName="Calibri" size="16" isBold="true"/>
+									</textElement>
+									<textFieldExpression><![CDATA[$V{backorder_dollars}]]></textFieldExpression>
+									<hyperlinkParameter name="_report">
+										<hyperlinkParameterExpression><![CDATA["/FourthGeneration/Reports/KeyMetrics__Details_of_Total_Dollars_Backorderd"]]></hyperlinkParameterExpression>
+									</hyperlinkParameter>
+								</textField>
+							</jr:listContents>
+						</jr:list>
+					</componentElement>
+				</frame>
+			</band>
+		</groupHeader>
+	</group>
+	<background>
+		<band height="90" splitType="Stretch">
+			<rectangle>
+				<reportElement x="5" y="3" width="1020" height="85" forecolor="#3366FF" uuid="5d21904d-e196-4ec1-9c3a-9cc4f72b5cf0"/>
+				<graphicElement>
+					<pen lineWidth="1.0"/>
+				</graphicElement>
+			</rectangle>
+		</band>
+	</background>
+	<title>
+		<band height="30" splitType="Stretch">
+			<staticText>
+				<reportElement x="10" y="5" width="456" height="25" forecolor="#3366FF" uuid="8415566c-d462-4be2-8335-79c214c8fd3f"/>
+				<textElement>
+					<font fontName="Calibri" size="20" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Key Metrics for Today (All warehouses):]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band splitType="Stretch"/>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>
