@@ -1,4 +1,4 @@
-# Business-Intelligence-System-for-ERP-Application
+# Business Intelligence System for ERP Application
 
 The solution was required to add Business Intelligence interface to the product that can provide one shot summary with high level of accuracy in single dashboard along with various interactive reporters. The requirement was to create a Dashboard & Report Management system to display the summary of statistical data in the form of various charts.
 
